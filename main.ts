@@ -10,14 +10,14 @@ const DEFAULT_SETTINGS: UpolSettings = {
 	name: ''
 }
 
-export default class MyPlugin extends Plugin {
+export default class UpolBuddy extends Plugin {
 	settings: UpolSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'UPOL Buddy', (evt: MouseEvent) => {
+		const OpenClassNote = this.addRibbonIcon('dice', 'UPOL Buddy', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
 			// IDEA: Po kliknutí by mohlo:
 			//       - otevřít náhodnou poznámku z jakéhokoliv předmětu
@@ -31,13 +31,15 @@ export default class MyPlugin extends Plugin {
 			}
 		});
 		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('upol-ribbon-class');
+		OpenClassNote.addClass('upol-ribbon-class');
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		// IDEA: Mohlo by zjistit jestli se jedná o poznámku ke konkrétnímu předmětu a napsat
 		//       za jak kolik dní zbývá do zkoušky z toho předmětu, pokud ji má student zapsanou.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Exam in 8 days 🗓️');
+		//
+		// TODO: Vypisovat pouze pokud má poznámka konkrétní štítek
+		const ExamDate = this.addStatusBarItem();
+		ExamDate.setText('Exam in 8 days 🗓️');
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -119,9 +121,9 @@ class SampleModal extends Modal {
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: UpolBuddy;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: UpolBuddy) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
