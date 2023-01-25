@@ -2,31 +2,42 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
-	mySetting: string;
+interface UpolSettings {
+	name: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+const DEFAULT_SETTINGS: UpolSettings = {
+	name: ''
 }
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: UpolSettings;
 
 	async onload() {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		const ribbonIconEl = this.addRibbonIcon('dice', 'UPOL Buddy', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+			// IDEA: Po kliknutí by mohlo:
+			//       - otevřít náhodnou poznámku z jakéhokoliv předmětu
+			//       - otevřít minulou poznámku z předmětu který bude začínat
+			//       - otevřít poznámku, která vychází jako nejméně naučená
+			//       - vytvořit novou poznámku do předmětu který zrovna probíhá
+			if (this.settings.name != '') {
+				new Notice('You\'re doing fantastic ' + this.settings.name + '! Keep it up️ 🫶.');
+			} else {
+				new Notice('You\'re doing fantastic! Keep it up️ 🫶.');
+			}
 		});
 		// Perform additional things with the ribbon
-		ribbonIconEl.addClass('my-plugin-ribbon-class');
+		ribbonIconEl.addClass('upol-ribbon-class');
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
+		// IDEA: Mohlo by zjistit jestli se jedná o poznámku ke konkrétnímu předmětu a napsat
+		//       za jak kolik dní zbývá do zkoušky z toho předmětu, pokud ji má student zapsanou.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
+		statusBarItemEl.setText('Exam in 8 days 🗓️');
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -116,21 +127,21 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const {containerEl: UpolName} = this;
 
-		containerEl.empty();
+		UpolName.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		UpolName.createEl('h2', {text: 'Settings for UPOL Buddy plugin.'});
 
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
+		new Setting(UpolName)
+			.setName('Jméno')
+			.setDesc('Tvoje jméno for affirmations.')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
+				.setPlaceholder('Enter your name')
+				.setValue(this.plugin.settings.name)
 				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
+					console.log('UPOL jmeno: ' + value);
+					this.plugin.settings.name = value;
 					await this.plugin.saveSettings();
 				}));
 	}
