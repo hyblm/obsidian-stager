@@ -1,29 +1,29 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, ButtonComponent, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, renderResults, request, requestUrl, Setting } from 'obsidian';
 
-// Remember to rename these classes and interfaces!
-
-interface UpolSettings {
+interface StagNationSettings {
 	name: string;
+	wsCookie: string;
 }
 
-const DEFAULT_SETTINGS: UpolSettings = {
-	name: ''
+const DEFAULT_SETTINGS: StagNationSettings = {
+	name: '',
+	wsCookie: '',
 }
 
-export default class UpolBuddy extends Plugin {
-	settings: UpolSettings;
+export default class StagNation extends Plugin {
+	settings: StagNationSettings;
 
 	async onload() {
 		await this.loadSettings();
 
-		// This creates an icon in the left ribbon.
-		const OpenClassNote = this.addRibbonIcon('dice', 'UPOL Buddy', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			// IDEA: Po kliknutí by mohlo:
-			//       - otevřít náhodnou poznámku z jakéhokoliv předmětu
-			//       - otevřít minulou poznámku z předmětu který bude začínat
-			//       - otevřít poznámku, která vychází jako nejméně naučená
-			//       - vytvořit novou poznámku do předmětu který zrovna probíhá
+		const OpenNextForReview = this.addRibbonIcon('calendar-with-checkmark', 'Open Next Topic for Review', (evt: MouseEvent) => {
+			// TODO: otevřít poznámku, která vychází jako nejméně naučená
+			});
+		const ReviewForUpcommingClass = this.addRibbonIcon('go-to-file', 'Review Last Note for Upcomming Class', (evt: MouseEvent) => {
+			// TODO: otevřít minulou poznámku z předmětu který bude začínat
+			});
+		const CreateCurrentClassNote = this.addRibbonIcon('pencil', 'Create Note for Current Class', (evt: MouseEvent) => {
+			// TODO: vytvořit novou poznámku do předmětu který zrovna probíhá
 			if (this.settings.name != '') {
 				new Notice('You\'re doing fantastic ' + this.settings.name + '! Keep it up️ 🫶.');
 			} else {
@@ -31,15 +31,16 @@ export default class UpolBuddy extends Plugin {
 			}
 		});
 		// Perform additional things with the ribbon
-		OpenClassNote.addClass('upol-ribbon-class');
+		OpenNextForReview.addClass('stagnation-ribbon-class');
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		// IDEA: Mohlo by zjistit jestli se jedná o poznámku ke konkrétnímu předmětu a napsat
 		//       za jak kolik dní zbývá do zkoušky z toho předmětu, pokud ji má student zapsanou.
 		//
 		// TODO: Vypisovat pouze pokud má poznámka konkrétní štítek
-		const ExamDate = this.addStatusBarItem();
-		ExamDate.setText('Exam in 8 days 🗓️');
+		const ExamDate = 8;
+		const ExamDateNotifier = this.addStatusBarItem();
+		ExamDateNotifier.setText("Exam in " + ExamDate + " days 🗓️");
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -79,7 +80,7 @@ export default class UpolBuddy extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new StagNationSettingsTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -120,31 +121,38 @@ class SampleModal extends Modal {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: UpolBuddy;
+class StagNationSettingsTab extends PluginSettingTab {
+	plugin: StagNation;
 
-	constructor(app: App, plugin: UpolBuddy) {
+	constructor(app: App, plugin: StagNation) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		const {containerEl: UpolName} = this;
+		const {containerEl: StagLogin} = this;
 
-		UpolName.empty();
+		StagLogin.empty();
 
-		UpolName.createEl('h2', {text: 'Settings for UPOL Buddy plugin.'});
+		StagLogin.createEl('h2', {text: 'Přihlášení uživatele do STAGu'});
 
-		new Setting(UpolName)
-			.setName('Jméno')
-			.setDesc('Tvoje jméno for affirmations.')
+		new Setting(StagLogin)
+			.setName('Osobní číslo ve Stagu')
 			.addText(text => text
-				.setPlaceholder('Enter your name')
+				.setPlaceholder('Example: R2986')
 				.setValue(this.plugin.settings.name)
 				.onChange(async (value) => {
-					console.log('UPOL jmeno: ' + value);
+					console.log('STAG Osobní číslo: ' + value);
 					this.plugin.settings.name = value;
 					await this.plugin.saveSettings();
 				}));
+
+		const loginUrl = "https://stagservices.upol.cz/ws/login?originalURL=obsidian%3A%2F%2Fopen";
+		new ButtonComponent(StagLogin)
+			.setButtonText("Přihlásit do STAGU")
+			.onClick(() => {
+				new Notice("Opening Login page in your browser");
+				window.open(loginUrl);
+		});
 	}
 }

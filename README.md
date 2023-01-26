@@ -1,7 +1,25 @@
-# Obsidian Sample Plugin
+# StagNation plugin for Obsidian -- Currently only available for students at UPOL
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+## 👋 Ahoj Míšo, sem můžeme zatím připisovat odkazy a poznámky, které by se hodilo vždy moct snadno najít.
 
+- [**Stránka s dokumentací WebServices API pro UPOL**](https://stag-ws.upol.cz/ws/web?pp_locale=en&selectedTyp=REST&pp_reqType=render&pp_page=serviceList)
+
+- [**Dokumentace STAG API k přihlašování**](https://is-stag.zcu.cz/napoveda/web-services/ws_prihlasovani.html)
+
+- [**Obsidian deklarace funkcí v API**](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)
+
+- [**Imgur plugin pro Obsidian. Pro inspiraci jak správně provést přihlašování**](https://github.com/gavvvr/obsidian-imgur-plugin/blob/master/src/ui/ImgurPluginSettingsTab.ts)
+
+
+## Další Kroky
+
+- [ ] Naučit se používat Issue Tracker a zaznamenat v něm co je potřeba udělat do MVP, i potenciálně zvažovné funkce
+- [ ] Napsal README.md pro uživatele a tyto poznámky přesunout do CONTRIBUTING.md
+- [ ] Vybudovat Plugin MVP
+- [ ] Zveřejnit Plugin MVP
+
+
+# Sample plugin template info
 This project uses Typescript to provide type checking and documentation.
 The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
 
