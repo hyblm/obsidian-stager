@@ -10,6 +10,8 @@
 
 - [**Imgur plugin pro Obsidian. Pro inspiraci jak správně provést přihlašování**](https://github.com/gavvvr/obsidian-imgur-plugin/blob/master/src/ui/ImgurPluginSettingsTab.ts)
 
+- [**Ikony které Obsidian používá**](https://lucide.dev/)
+
 
 ## Další Kroky
 
