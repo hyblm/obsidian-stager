@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-stagnation",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "An Obsidian plugin that hooks into STAG (information system often used by Czech Universities), and helps you manage your class notes and exams.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
