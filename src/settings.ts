@@ -16,7 +16,7 @@ export class StagNationSettingsTab extends PluginSettingTab {
 			if (params.error) {
 				new Notice(`STAG Authentication failed with error: ${params.error}`);
 				return;
-			};
+			}
 			// NEXT: Parseout the relevant login tokens and store them in settings
 			console.log(params);
 		});

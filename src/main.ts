@@ -155,7 +155,7 @@ export class StagLoginModal extends Modal {
 	private opened = false;
 	plugin: StagNation;
 	
-	get isOpen(): boolean { return this.opened };
+	get isOpen(): boolean { return this.opened }
 
 	private readonly loginLink: string;
 
