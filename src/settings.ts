@@ -2,7 +2,6 @@ import StagNation from "src/main";
 import { App, PluginSettingTab, Setting, ButtonComponent, Notice } from "obsidian";
 import University from "src/university";
 
-
 export class StagNationSettingsTab extends PluginSettingTab {
 	plugin: StagNation;
 
@@ -22,7 +21,6 @@ export class StagNationSettingsTab extends PluginSettingTab {
 			);
 			console.log(this.plugin.settings.loginState);
 			new Notice(`You are now signed in as ${this.plugin.settings.loginState.stagUserName}`);
-
 		});
 	}
 
