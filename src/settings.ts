@@ -23,7 +23,8 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				params.stagUserTicket,
 			);
 
-			console.log("login state: " + this.plugin.settings.loginState);
+			console.log("You are now signed in as " + this.plugin.settings.loginState.stagUserName);
+			console.log(this.plugin.settings.loginState);
 			new Notice("You are now signed in as " + this.plugin.settings.loginState.stagUserName);
 			this.updateLoginStateSetting()
 		});
@@ -85,6 +86,7 @@ export class StagNationSettingsTab extends PluginSettingTab {
 	}
 
 	private SettingLogin() {
+		const loginSlug = `/ws/login?originalURL=obsidian%3A%2F%2Fstag-login`;
 		this.loginState
 			.clear()
 			.setName('Login State')
@@ -93,7 +95,7 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				button
 					.setButtonText("Log-in to IS/STAG").setCta()
 					.onClick(() => {
-						window.open(this.plugin.settings.university);
+						window.open(this.plugin.settings.university + loginSlug);
 		})})
 	}
 }

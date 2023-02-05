@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Plugin, requestUrl } from 'obsidian';
 import { StagNationSettingsTab } from './settings';
 import University from './university';
 
@@ -63,8 +63,14 @@ export default class StagNation extends Plugin {
 		this.saveSettings();
 	}
 
+	stagCall (group: string, service: string): string {
+		return this.settings.university + '/ws/services/rest2/' + group + '/' + service + '?'
+	}
+
 	async clearLoginState()
 	{
+		requestUrl(this.stagCall("help", "invalidateTicket") + 'ticket=' + this.settings.loginState.stagUserTicket)
+			.then(res => console.log("Response for Ticket Invalidation: " + res.text))
 		this.settings.loginState = BLANK_LOGIN
 		this.saveSettings();
 	}
