@@ -1,9 +1,10 @@
 import StagNation from "src/main";
-import { App, PluginSettingTab, Setting, ButtonComponent, Notice } from "obsidian";
+import { App, PluginSettingTab, Setting, Notice } from "obsidian";
 import University from "src/university";
 
 export class StagNationSettingsTab extends PluginSettingTab {
 	plugin: StagNation;
+	loginState: Setting;
 
 	constructor(app: App, plugin: StagNation) {
 		super(app, plugin);
@@ -16,31 +17,24 @@ export class StagNationSettingsTab extends PluginSettingTab {
 			}
 
 			this.plugin.updateLoginState(
-				params.stagUserInfo, params.stagUserName,
-				params.stagUserRole, params.stagUserTicket,
+				params.stagUserInfo,
+				params.stagUserName,
+				params.stagUserRole,
+				params.stagUserTicket,
 			);
-			console.log(this.plugin.settings.loginState);
-			new Notice(`You are now signed in as ${this.plugin.settings.loginState.stagUserName}`);
+
+			console.log("login state: " + this.plugin.settings.loginState);
+			new Notice("You are now signed in as " + this.plugin.settings.loginState.stagUserName);
+			this.updateLoginStateSetting()
 		});
 	}
 
-	display(): void {
-		const {containerEl: StagLogin} = this;
+	async display(): Promise<void> {
+		const { containerEl: StagLogin } = this;
 
 		StagLogin.empty();
 
-		StagLogin.createEl('h3', {text: 'Přihlášení uživatele do STAGu'});
-
-		new Setting(StagLogin)
-			.setName('Osobní číslo ve Stagu')
-			.addText(text => text
-				.setPlaceholder('Example: R2986')
-				.setValue(this.plugin.settings.osCislo)
-				.onChange(async (value) => {
-					console.log('STAG Osobní číslo: ' + value);
-					this.plugin.settings.osCislo = value;
-					await this.plugin.saveSettings();
-		}));
+		StagLogin.createEl('h2', {text: 'IS/STAG Authentication'});
 
 		new Setting(StagLogin)
 			.setName('University')
@@ -55,13 +49,51 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				});
 		});
 
-		new ButtonComponent(StagLogin)
-			.setIcon("log-in")
-			.setButtonText("Sign-in to IS/STAG")
-			.setCta()
-			.setTooltip("You're not signed in right now.")
-			.onClick(() => {
-				window.open(this.plugin.settings.university);
-		});
+		new Setting(StagLogin)
+			.setName('Osobní číslo ve Stagu')
+			.addText(text => text
+				.setPlaceholder('Example: R2986')
+				.setValue(this.plugin.settings.osCislo)
+				.onChange(async (value) => {
+					console.log('STAG Osobní číslo: ' + value);
+					this.plugin.settings.osCislo = value;
+					await this.plugin.saveSettings();
+		}));
+
+		this.loginState = new Setting(StagLogin)
+			.setName('Login State')
+			.setDesc('Getting login state')
+
+		this.updateLoginStateSetting()
+		}
+
+	updateLoginStateSetting() {
+		if (this.plugin.settings.loginState.stagUserName === '')
+			this.SettingLogin()
+		else
+			this.loginState
+				.clear()
+				.setName('Login State')
+				.setDesc('Logged-in as ' + this.plugin.settings.loginState.stagUserName)
+				.addButton(button => {
+					button
+						.setButtonText("Sign-out")
+						.onClick(() => {
+							this.plugin.clearLoginState();
+							this.SettingLogin()
+			})})
+	}
+
+	private SettingLogin() {
+		this.loginState
+			.clear()
+			.setName('Login State')
+			.setDesc('Currently not logged-in')
+			.addButton(button => {
+				button
+					.setButtonText("Log-in to IS/STAG").setCta()
+					.onClick(() => {
+						window.open(this.plugin.settings.university);
+		})})
 	}
 }

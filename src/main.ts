@@ -54,11 +54,12 @@ export default class StagNation extends Plugin {
 		stagUserInfo: string, stagUserName: string,
 		stagUserRole: string, stagUserTicket: string)
 	{
-		this.settings.loginState.stagUserInfo = stagUserInfo
-		this.settings.loginState.stagUserName = stagUserName
-		this.settings.loginState.stagUserRole = stagUserRole
-		this.settings.loginState.stagUserTicket = stagUserTicket 
-
+		this.settings.loginState = {
+			stagUserInfo: stagUserInfo,
+			stagUserName: stagUserName,
+			stagUserRole: stagUserRole,
+			stagUserTicket: stagUserTicket
+		}
 		this.saveSettings();
 	}
 
