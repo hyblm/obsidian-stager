@@ -66,6 +66,21 @@ export class StagNationSettingsTab extends PluginSettingTab {
 			.setDesc('Getting login state')
 
 		this.updateLoginStateSetting()
+
+		StagLogin.createEl('h3', {text: 'Settings'});
+
+		new Setting(StagLogin)
+			.setName("Language")
+			.setDesc("Whether to show information from STAG in Czech or English")
+			.addDropdown(lang => {
+				lang
+					.addOption("cz", "Czech")
+					.addOption("en", "English")
+					.setValue(this.plugin.settings.language)
+					.onChange(async v => {
+						this.plugin.settings.language = v
+						await this.plugin.saveSettings();
+		})})
 		}
 
 	updateLoginStateSetting() {
@@ -97,5 +112,6 @@ export class StagNationSettingsTab extends PluginSettingTab {
 					.onClick(() => {
 						window.open(this.plugin.settings.university + loginSlug);
 		})})
+
 	}
 }

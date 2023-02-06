@@ -23,12 +23,14 @@ interface StagNationSettings {
 	university: string;
 	loginState: StagLogin;
 	osCislo: string;
+	language: string;
 }
 
 const DEFAULT_SETTINGS: StagNationSettings = {
 	university: University.UPOL.link,
 	loginState: BLANK_LOGIN,
 	osCislo: '',
+	language: 'cz',
 }
 
 export default class StagNation extends Plugin {
