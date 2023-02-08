@@ -16,16 +16,18 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				return;
 			}
 
-			this.plugin.updateLoginState(
+			if (this.plugin.settings.loginState.stagUserTicket != '') {
+				this.plugin.clearLogin()
+			}
+
+			this.plugin.createLogin(
 				params.stagUserInfo,
 				params.stagUserName,
 				params.stagUserRole,
 				params.stagUserTicket,
 			);
 
-			console.log("You are now signed in as " + this.plugin.settings.loginState.stagUserName);
-			console.log(this.plugin.settings.loginState);
-			new Notice("You are now signed in as " + this.plugin.settings.loginState.stagUserName);
+			new Notice("You are now loged in as " + this.plugin.settings.loginState.stagUserName);
 			this.updateLoginStateSetting()
 		});
 	}
@@ -89,18 +91,20 @@ export class StagNationSettingsTab extends PluginSettingTab {
 		else
 			this.loginState
 				.clear()
-				.setName('Login State')
-				.setDesc('Logged-in as ' + this.plugin.settings.loginState.stagUserName)
+				.setName('Logged-in as ' + this.plugin.settings.loginState.stagUserName)
+				.setDesc((90 - Math.trunc((Date.now() - this.plugin.settings.loginState.created) / (1000 * 3600 * 24)))
+				+ " days left before re-login needed")
 				.addButton(button => {
 					button
-						.setButtonText("Sign-out")
+						.setButtonText("Log-out")
 						.onClick(() => {
-							this.plugin.clearLoginState();
+							this.plugin.clearLogin();
 							this.SettingLogin()
 			})})
 	}
 
 	private SettingLogin() {
+		// TODO: add long ticket flag to login
 		const loginSlug = `/ws/login?originalURL=obsidian%3A%2F%2Fstag-login`;
 		this.loginState
 			.clear()
