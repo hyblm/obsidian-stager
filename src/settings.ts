@@ -1,6 +1,7 @@
 import StagNation from "src/main";
 import { App, PluginSettingTab, Setting, Notice } from "obsidian";
 import University from "src/university";
+import { StagUser } from "./stag";
 
 export class StagNationSettingsTab extends PluginSettingTab {
 	plugin: StagNation;
@@ -16,18 +17,21 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				return;
 			}
 
-			if (this.plugin.settings.loginState.stagUserTicket != '') {
-				this.plugin.clearLogin()
+			if (this.plugin.settings.stag.user.ticket != '') {
+				console.log(`Caught old ticket (${this.plugin.settings.stag.user.ticket}). Invalidating ...`)
+				this.plugin.settings.stag.invalidateTicket()
 			}
 
-			this.plugin.createLogin(
-				params.stagUserInfo,
-				params.stagUserName,
-				params.stagUserRole,
-				params.stagUserTicket,
-			);
+			this.plugin.settings.stag.user = new StagUser({
+				info: params.stagUserInfo,
+				name: params.stagUserName,
+				role: params.stagUserRole,
+				ticket: params.stagUserTicket,
+			})
 
-			new Notice("You are now loged in as " + this.plugin.settings.loginState.stagUserName);
+			this.plugin.saveSettings()
+
+			new Notice("You are now loged in as " + this.plugin.settings.stag.user.name);
 			this.updateLoginStateSetting()
 		});
 	}
@@ -37,31 +41,7 @@ export class StagNationSettingsTab extends PluginSettingTab {
 
 		StagLogin.empty();
 
-		StagLogin.createEl('h2', {text: 'IS/STAG Authentication'});
-
-		new Setting(StagLogin)
-			.setName('University')
-			.addDropdown((dropdown) => {
-				University.values.forEach((s) => {
-					dropdown.addOption(s.link, s.name);
-				});
-				dropdown.setValue(this.plugin.settings.university);
-				dropdown.onChange(async (v) => {
-					this.plugin.settings.university = v;
-					this.plugin.saveSettings();
-				});
-		});
-
-		new Setting(StagLogin)
-			.setName('Osobní číslo ve Stagu')
-			.addText(text => text
-				.setPlaceholder('Example: R2986')
-				.setValue(this.plugin.settings.osCislo)
-				.onChange(async (value) => {
-					console.log('STAG Osobní číslo: ' + value);
-					this.plugin.settings.osCislo = value;
-					await this.plugin.saveSettings();
-		}));
+		StagLogin.createEl('h2', { text: 'IS/STAG Authentication' });
 
 		this.loginState = new Setting(StagLogin)
 			.setName('Login State')
@@ -69,7 +49,18 @@ export class StagNationSettingsTab extends PluginSettingTab {
 
 		this.updateLoginStateSetting()
 
-		StagLogin.createEl('h3', {text: 'Settings'});
+		new Setting(StagLogin)
+			.setName('Osobní číslo ve Stagu')
+			.addText(text => text
+				.setPlaceholder('Example: R2986')
+				.setValue(this.plugin.settings.stag.osCislo)
+				.onChange(async (value) => {
+					console.log('STAG Osobní číslo: ' + value);
+					this.plugin.settings.stag.osCislo = value;
+					await this.plugin.saveSettings();
+				}));
+
+		StagLogin.createEl('h3', { text: 'Settings' });
 
 		new Setting(StagLogin)
 			.setName("Language")
@@ -78,44 +69,56 @@ export class StagNationSettingsTab extends PluginSettingTab {
 				lang
 					.addOption("cz", "Czech")
 					.addOption("en", "English")
-					.setValue(this.plugin.settings.language)
+					.setValue(this.plugin.settings.stag.language)
 					.onChange(async v => {
-						this.plugin.settings.language = v
+						this.plugin.settings.stag.language = v
 						await this.plugin.saveSettings();
-		})})
-		}
+					})
+			})
+	}
 
 	updateLoginStateSetting() {
-		if (this.plugin.settings.loginState.stagUserName === '')
+		if (this.plugin.settings.stag.user.name === '')
 			this.SettingLogin()
 		else
 			this.loginState
 				.clear()
-				.setName('Logged-in as ' + this.plugin.settings.loginState.stagUserName)
-				.setDesc((90 - Math.trunc((Date.now() - this.plugin.settings.loginState.created) / (1000 * 3600 * 24)))
-				+ " days left before re-login needed")
+				.setName("Logged-in as " + this.plugin.settings.stag.user.name)
+				.setDesc(this.plugin.settings.stag.daysToLive + " days left before re-login needed")
 				.addButton(button => {
 					button
-						.setButtonText("Log-out")
+						.setButtonText("Log-out of " + this.plugin.settings.stag.university.name)
 						.onClick(() => {
-							this.plugin.clearLogin();
+							this.plugin.settings.stag.logout()
+							this.plugin.saveSettings()
 							this.SettingLogin()
-			})})
+						})
+				})
 	}
 
 	private SettingLogin() {
-		// TODO: add long ticket flag to login
-		const loginSlug = `/ws/login?originalURL=obsidian%3A%2F%2Fstag-login`;
 		this.loginState
 			.clear()
 			.setName('Login State')
 			.setDesc('Currently not logged-in')
+			.addDropdown((dropdown) => {
+				University.values.forEach((uni) => {
+					dropdown.addOption(uni.link, uni.name);
+				});
+				dropdown.setValue(this.plugin.settings.stag.university.link);
+				dropdown.onChange(async (v) => {
+					University.values.forEach((uni) => {
+						if (uni.link === v)
+							this.plugin.settings.stag.university = uni;
+					})
+					this.plugin.saveSettings();
+				});
+			})
 			.addButton(button => {
 				button
 					.setButtonText("Log-in to IS/STAG").setCta()
-					.onClick(() => {
-						window.open(this.plugin.settings.university + loginSlug);
-		})})
-
+					.onClick(() => this.plugin.settings.stag.login()
+					)
+			})
 	}
 }

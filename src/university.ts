@@ -10,6 +10,11 @@ export default class University {
 	"https://stagservices.upol.cz"
 	);
 
+	static readonly UTB = new University(
+	"Univerzita Tomáše Bati ve Zlíně",
+	"https://stag-ws.utb.cz"
+	);
+
 	private constructor(readonly name: string, readonly link: string) {
 		University.valuesArr.push(this);
 	}
