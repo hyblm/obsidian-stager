@@ -1,31 +1,29 @@
-# StagNation plugin for Obsidian -- Currently only available for students at UPOL
+# StagNation
+## The Obsidian Plugin for managing your classes at universities using the STAG information system
 
-## 👋 Ahoj Míšo, sem můžeme zatím připisovat odkazy a poznámky, které by se hodilo vždy moct snadno najít.
+So far the plugin only provides authentication functionality.
+All class management features are still in development (see roadmap below).
 
-- [**Stránka s dokumentací WebServices API pro UPOL**](https://stag-ws.upol.cz/ws/web?pp_locale=en&selectedTyp=REST&pp_reqType=render&pp_page=serviceList)
+Currently the plan is to have the plugin use information from STAG in a way that is compatible 
+with using other plugins for the actual management part. Namely the
+[Projects plugin](https://github.com/marcusolsson/obsidian-projects)
+and the 
+[Spaced repetition plugin](https://github.com/st3v3nmw/obsidian-spaced-repetition)
+.
 
-- [**Dokumentace STAG API k přihlašování**](https://is-stag.zcu.cz/napoveda/web-services/ws_prihlasovani.html)
+## Roadmap
 
-- [**Obsidian deklarace funkcí v API**](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)
+### Next Up
+ - Importing classes as notes with appropriate yaml headers
+ - Customizing yaml header fields
 
-- [**Imgur plugin pro Obsidian. Pro inspiraci jak správně provést přihlašování**](https://github.com/gavvvr/obsidian-imgur-plugin/blob/master/src/ui/ImgurPluginSettingsTab.ts)
+# Development
+
+- [**WebServices API Documentation for UPOL**](https://stag-ws.upol.cz/ws/web?pp_locale=en&selectedTyp=REST&pp_reqType=render&pp_page=serviceList)
+
+- [**STAG API documentation authentication section**](https://is-stag.zcu.cz/napoveda/web-services/ws_prihlasovani.html)
 
 - [**Ikony které Obsidian používá**](https://lucide.dev/)
-
-
-## Další Kroky
-
-- [ ] Naučit se používat Issue Tracker a zaznamenat v něm co je potřeba udělat do MVP, i potenciálně zvažovné funkce
-- [ ] Napsal README.md pro uživatele a tyto poznámky přesunout do CONTRIBUTING.md
-- [ ] Vybudovat Plugin MVP
-- [ ] Zveřejnit Plugin MVP
-
-
-# Sample plugin template info
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
-
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
 
 This sample plugin demonstrates some of the basic functionality the plugin API can do.
 - Changes the default font color to red using `styles.css`.
@@ -35,19 +33,6 @@ This sample plugin demonstrates some of the basic functionality the plugin API c
 - Registers a global click event and output 'click' to the console.
 - Registers a global interval which logs 'setInterval' to the console.
 
-## First time developing plugins?
-
-Quick starting guide for new plugin devs:
-
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
 
 ## Releasing new releases
 
@@ -87,30 +72,8 @@ Quick starting guide for new plugin devs:
 - If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
   - `eslint .\src\`
 
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
 ## API Documentation
 
 See https://github.com/obsidianmd/obsidian-api
+- [**Obsidian API (obsidian.d.ts)**](https://github.com/obsidianmd/obsidian-api/blob/master/obsidian.d.ts)
+**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
