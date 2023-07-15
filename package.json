@@ -1,5 +1,5 @@
 {
-	"name": "obsidian-stagnation",
+	"name": "obsidian-stager",
 	"version": "1.0.0",
 	"description": "An Obsidian plugin that hooks into STAG (information system often used by Czech Universities), and helps you manage your class notes and exams.",
 	"main": "main.js",

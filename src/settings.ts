@@ -1,13 +1,13 @@
-import StagNation from "src/main";
+import Stager from "src/main";
 import { App, PluginSettingTab, Setting, Notice } from "obsidian";
 import University from "src/university";
 import { StagUser } from "./stag";
 
-export class StagNationSettingsTab extends PluginSettingTab {
-	plugin: StagNation;
+export class StagerSettingsTab extends PluginSettingTab {
+	plugin: Stager;
 	loginState: Setting;
 
-	constructor(app: App, plugin: StagNation) {
+	constructor(app: App, plugin: Stager) {
 		super(app, plugin);
 		this.plugin = plugin;
 
