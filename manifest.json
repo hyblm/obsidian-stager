@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-stagnation",
-	"name": "StagNation",
+	"id": "obsidian-stager",
+	"name": "Stager",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Helps you manage your classes and exam dates.",
-	"author": "Matáš Hýbl a My Lynh Duongová",
+	"author": "Matáš Hýbl",
 	"authorUrl": "https://hyblm.dev",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
