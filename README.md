@@ -1,4 +1,4 @@
-# StagNation
+![](Stager_logotype.png)
 ## The Obsidian Plugin for managing your classes at universities using the STAG information system
 
 So far the plugin only provides authentication functionality.
